@@ -26,7 +26,7 @@ function! vimplack#handle(req)
     endif
     let res = [302, ["Location", "/"], [""]]
   else
-    let res = [404, [], ["404 Dan Nout Found"]]
+    let res = [404, [], ["404 Dan Not Found"]]
   endif
   return json#encode(res)
 endfunction
