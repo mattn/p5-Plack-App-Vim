@@ -4,5 +4,5 @@ use Plack::Builder;
 use Plack::App::Vim;
 
 builder {
-    mount "/" => Plack::App::Vim->new(server => 'GVIM');
+    mount "/" => Plack::App::Vim->new(server => 'VIM');
 };
