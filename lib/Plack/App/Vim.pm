@@ -39,6 +39,7 @@ sub call {
         content => $req->content,
     });
     $str =~ s!"!\\x22!g;
+    $str =~ s!'!\\x27!g;
 
     my $command;
     if ($^O eq 'MSWin32') {
