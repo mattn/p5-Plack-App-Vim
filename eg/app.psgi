@@ -1,5 +1,5 @@
 #!perl
-use lib qw/lib/;
+use lib qw(../lib);
 use Plack::Builder;
 use Plack::App::Vim;
 
