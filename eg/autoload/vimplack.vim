@@ -7,6 +7,7 @@ function! vimplack#handle(req)
   if req.uri == "/"
     let res = [200, ["Content-Type", "text/html; charset=utf-8"], [""
 \."<html>"
+\."<title>comment board</title>"
 \."<body>"
 \."<form action='/regist' method='post'>"
 \."コメント:<input type='text' name='comment' value='' /><br />"
