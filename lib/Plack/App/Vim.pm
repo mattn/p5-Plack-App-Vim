@@ -24,6 +24,7 @@ sub prepare_app {
         chomp $encoding;
         $self->{encoding} = $encoding;
     }
+    $self->{handler_func} ||= 'vimplack#handle';
     $self;
 }
 
@@ -44,13 +45,15 @@ sub call {
     my $command;
     if ($^O eq 'MSWin32') {
         $command = sprintf(
-            '%s --servername %s --remote-expr "vimplack#handle("""%s""")"',
+            '%s --servername %s --remote-expr "%s("""%s""")"',
             $self->{vim}, $self->{server},
+            $self->{handler_func},
             encode($self->{encoding} || 'utf8', $str));
     } else {
         $command = sprintf(
-            "%s --servername %s --remote-expr 'vimplack#handle(\"%s\")'",
+            "%s --servername %s --remote-expr '%s(\"%s\")'",
             $self->{vim}, $self->{server},
+            $self->{handler_func},
             encode($self->{encoding} || 'utf8', $str));
     }
     open(my $f, "$command|");
