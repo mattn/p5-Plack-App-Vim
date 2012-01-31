@@ -5,7 +5,7 @@ let s:comments = get(s:, 'comments', [])
 function! vimplack#handle(req)
   let req = json#decode(a:req)
   if req.uri == "/"
-    let res = [200, ["Content-Type", "text/html; charset=utf-8"], [""
+    let res = [200, {"Content-Type": "text/html; charset=utf-8"}, [""
 \."<html>"
 \."<title>comment board</title>"
 \."<body>"
@@ -25,9 +25,9 @@ function! vimplack#handle(req)
 	if has_key(params, 'comment')
       call add(s:comments, params['comment'])
     endif
-    let res = [302, ["Location", "/"], [""]]
+    let res = [302, {"Location": "/"}, [""]]
   else
-    let res = [404, [], ["404 Dan Not Found"]]
+    let res = [404, {}, ["404 Dan Not Found"]]
   endif
   return json#encode(res)
 endfunction

@@ -61,8 +61,12 @@ sub call {
     my $out = <$f>;
     close $f;
     my $res = $json->decode($out);
-    $res->[2][0] = encode_utf8 $res->[2][0] if $res;
-    $res || [500, ['Content-Type' => 'text/plain'], ['Internal Server Error']];
+    if ($res) {
+        $res->[1] = [%{$res->[1]}];
+        $res->[2][0] = encode_utf8 $res->[2][0];
+        return $res;
+    }
+    [500, ['Content-Type' => 'text/plain'], ['Internal Server Error']];
 }
 
 1;
