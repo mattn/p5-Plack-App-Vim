@@ -1,0 +1,38 @@
+Plack::App::Vim
+===============
+
+Vim Application Handler for PSGI
+
+Install
+-------
+
+### webapi-vim
+
+    cd ~/.vim/bundle
+    git clone https://github.com/mattn/webapi-vim.git
+
+### Plack
+
+    cpanm Plack
+
+Run
+---
+
+### 1. start server
+
+    cd eg
+    plackup 
+
+### 2. open new terminal. and start vim
+
+    cd eg
+    vim --servername VIM
+    :so autoload/vimplack.vim
+
+### 3. open browser http://localhost:5000/
+
+
+Author
+------
+
+Yasuhiro Matsumoto
