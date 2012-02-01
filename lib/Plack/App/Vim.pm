@@ -10,18 +10,13 @@ sub prepare_app {
     my $self = shift;
     $self->{vim} ||= 'vim';
     if (!$self->{server}) {
-        open(my $f, "vim --serverlist|");
-        my $server = <$f>;
-        close($f);
-        chomp $server;
+        chomp(my $server = `$self->{vim} --serverlist`);
         $self->{server} = $server;
     }
     if (!$self->{encoding}) {
-        open(my $f, sprintf("%s --servername %s --remote-expr \"&encoding\"|",
-            $self->{vim}, $self->{server}));
-        my $encoding = <$f>;
-        close($f);
-        chomp $encoding;
+        my $cmd = sprintf("%s --servername %s --remote-expr \"&encoding\"",
+            $self->{vim}, $self->{server});
+        chomp(my $encoding = `$cmd`);
         $self->{encoding} = $encoding;
     }
     $self->{handler_func} ||= 'vimplack#handle';
@@ -56,14 +51,10 @@ sub call {
             $self->{handler_func},
             encode($self->{encoding} || 'utf8', $str));
     }
-    open(my $f, "$command|");
-    binmode $f, ':utf8';
-    my $out = <$f>;
-    close $f;
-    my $res = $json->decode($out);
+    my $res = $json->decode(decode_utf8(`$command`));
     if ($res) {
         $res->[1] = [%{$res->[1]}];
-        $res->[2][0] = encode_utf8 $res->[2][0];
+        $res->[2][0] = encode_utf8($res->[2][0]);
         return $res;
     }
     [500, ['Content-Type' => 'text/plain'], ['Internal Server Error']];
