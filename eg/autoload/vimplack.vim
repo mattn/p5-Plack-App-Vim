@@ -3,7 +3,7 @@ scriptencoding utf-8
 let s:comments = get(s:, 'comments', [])
 
 function! vimplack#handle(req)
-  let req = json#decode(a:req)
+  let req = webapi#json#decode(a:req)
   if req.uri == "/"
     let res = [200, {"Content-Type": "text/html; charset=utf-8"}, [""
 \."<html>"
@@ -14,14 +14,14 @@ function! vimplack#handle(req)
 \."comment:<input type='text' name='comment' value='' /><br />"
 \."<input type='submit' value='add' />"
 \."</form>"
-\.join(map(copy(s:comments), 'html#encodeEntityReference(v:val)'), '<br />')
+\.join(map(copy(s:comments), 'webapi#html#encodeEntityReference(v:val)'), '<br />')
 \."</body>"
 \."</html>"
 \]]
   elseif req.uri == '/regist' && req.method == 'POST'
     let params = {}
     for _ in map(split(req.content, '&'), 'split(v:val,"=")')
-      let params[_[0]] = iconv(http#decodeURI(_[1]), 'utf-8', &encoding)
+      let params[_[0]] = iconv(webapi#http#decodeURI(_[1]), 'utf-8', &encoding)
     endfor
 	if has_key(params, 'comment')
       call add(s:comments, params['comment'])
@@ -30,5 +30,6 @@ function! vimplack#handle(req)
   else
     let res = [404, {}, ["404 Dan Not Found"]]
   endif
-  return json#encode(res)
+  return webapi#json#encode(res)
 endfunction
+
